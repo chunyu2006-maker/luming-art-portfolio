@@ -42,7 +42,7 @@ header{
 }
 
 .brand-accent{
-  color:#b08d57;
+  color:#c9a54a;
 }
 
 nav button{
@@ -159,21 +159,21 @@ footer{
 
 .close{
   position:absolute;
-  top:14px;
-  right:14px;
-  background:#111;
+  top:16px;
+  right:16px;
+  background:rgba(17,17,17,0.82);
   color:white;
   border-radius:50%;
-  width:52px;
-  height:52px;
-  border:3px solid white;
-  font-size:28px;
-  font-weight:700;
+  width:44px;
+  height:44px;
+  border:2px solid rgba(255,255,255,0.9);
+  font-size:22px;
+  font-weight:600;
   cursor:pointer;
   display:flex;
   align-items:center;
   justify-content:center;
-  box-shadow:0 4px 14px rgba(0,0,0,0.28);
+  box-shadow:0 3px 10px rgba(0,0,0,0.18);
   z-index:5;
 }
 
@@ -184,20 +184,7 @@ footer{
   align-items:start;
 }
 
-.bio-photo-placeholder{
-  width:100%;
-  aspect-ratio:4/5;
-  border:2px dashed #d7d7d7;
-  border-radius:22px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#888;
-  background:#fafafa;
-  font-size:15px;
-  text-align:center;
-  padding:20px;
-}
+
 
 @media(max-width:900px){
   .grid{grid-template-columns:repeat(2,1fr);} 
@@ -235,14 +222,14 @@ footer{
   </section>
 
   <section id="portfolio" class="page">
-    <h1 id="portfolioTitle"></h1>
+    <h1 id="portfolioTitle" class="home-title"></h1>
     <div class="grid" id="artworkGrid"></div>
   </section>
 
   <section id="bio" class="page">
     <h1>Biography</h1>
     <div class="bio-layout">
-      <div class="bio-photo-placeholder">Photo Placeholder<br>for Artist Portrait</div>
+      <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80" alt="Artist portrait" style="width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:22px; display:block;">
       <div>
         <p style="max-width:700px;line-height:1.8;color:#666">
           Luming Niu is a painter exploring expression, atmosphere, and color relationships. Her work includes portraits, landscapes, abstract paintings, and sketch studies. This section can later include a full artist statement and exhibition history.
