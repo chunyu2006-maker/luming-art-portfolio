@@ -154,12 +154,7 @@ footer{
   cursor:pointer;
 }
 
-.note{
-  margin-top:18px;
-  color:#666;
-  line-height:1.7;
-  font-size:14px;
-}
+
 
 @media(max-width:900px){
   .grid{grid-template-columns:repeat(2,1fr);} 
@@ -230,7 +225,7 @@ footer{
         <p id="modalSize" class="meta"></p>
         <p id="modalMedium" class="meta"></p>
         <p id="modalStatus" class="status"></p>
-        <p class="note">Click anywhere outside the picture to close it and return to the gallery.</p>
+        <div style="margin-top:20px;"><button class="btn primary" onclick="showPage('contact'); modal.classList.remove('open');">Inquiry</button></div>
       </div>
     </div>
   </div>
