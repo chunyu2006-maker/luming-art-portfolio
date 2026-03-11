@@ -161,19 +161,19 @@ footer{
   position:absolute;
   top:16px;
   right:16px;
-  background:rgba(17,17,17,0.82);
-  color:white;
+  background:white;
+  color:#333;
   border-radius:50%;
-  width:44px;
-  height:44px;
-  border:2px solid rgba(255,255,255,0.9);
+  width:40px;
+  height:40px;
+  border:2px solid #ddd;
   font-size:22px;
   font-weight:600;
   cursor:pointer;
   display:flex;
   align-items:center;
   justify-content:center;
-  box-shadow:0 3px 10px rgba(0,0,0,0.18);
+  box-shadow:0 2px 6px rgba(0,0,0,0.15);
   z-index:5;
 }
 
@@ -223,6 +223,7 @@ footer{
 
   <section id="portfolio" class="page">
     <h1 id="portfolioTitle" class="home-title"></h1>
+    <div id="categoryNav" style="display:flex;gap:14px;margin-bottom:24px;flex-wrap:wrap;"></div>
     <div class="grid" id="artworkGrid"></div>
   </section>
 
@@ -310,7 +311,17 @@ function openPortfolio(cat){
 function renderPortfolioPage(cat){
   showOnlyPage('portfolio');
   portfolioTitle.textContent=cat.charAt(0).toUpperCase()+cat.slice(1);
+  renderCategoryNav(cat);
   renderArtworks(cat);
+}
+
+function renderCategoryNav(active){
+  const nav=document.getElementById('categoryNav');
+  nav.innerHTML=categories.map(c=>{
+    const label=c.charAt(0).toUpperCase()+c.slice(1);
+    const activeStyle=c===active?"background:#111;color:white;":"background:#f3f3f3;color:#222;";
+    return `<button style="border:none;padding:10px 16px;border-radius:20px;cursor:pointer;${activeStyle}" onclick="openPortfolio('${c}')">${label}</button>`;
+  }).join('');
 }
 
 function renderArtworks(cat){
