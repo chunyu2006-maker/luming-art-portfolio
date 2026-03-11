@@ -38,6 +38,7 @@ header{
   font-family:'Playfair Display',serif;
   font-size:46px;
   font-weight:700;
+  cursor:pointer;
 }
 
 nav button{
@@ -70,6 +71,7 @@ h1{font-size:36px;margin-bottom:20px;}
   border-radius:20px;
   overflow:hidden;
   background:white;
+  cursor:pointer;
 }
 
 .card img{
@@ -118,11 +120,13 @@ footer{
   display:none;
   align-items:center;
   justify-content:center;
+  padding:20px;
 }
 
 .modal.open{display:flex;}
 
 .modal-box{
+  position:relative;
   background:white;
   border-radius:20px;
   overflow:hidden;
@@ -147,159 +151,174 @@ footer{
   height:40px;
   border:none;
   font-size:20px;
+  cursor:pointer;
+}
+
+.note{
+  margin-top:18px;
+  color:#666;
+  line-height:1.7;
+  font-size:14px;
 }
 
 @media(max-width:900px){
-.grid{grid-template-columns:repeat(2,1fr);} 
-.modal-grid{grid-template-columns:1fr;} 
+  .grid{grid-template-columns:repeat(2,1fr);} 
+  .modal-grid{grid-template-columns:1fr;} 
 }
 
+@media(max-width:640px){
+  .header-inner{flex-direction:column;align-items:flex-start;gap:14px;}
+  .grid{grid-template-columns:1fr;}
+  .brand{font-size:38px;}
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<div class="container header-inner">
-<div class="brand">Luming Niu Artwork</div>
-<nav>
-<button class="nav active" data-page="home">Home</button>
-<button class="nav" data-page="bio">Biography</button>
-<button class="nav" data-page="contact">Contact</button>
-</nav>
-</div>
+  <div class="container header-inner">
+    <div class="brand" onclick="showPage('home')">Luming Niu Artwork</div>
+    <nav>
+      <button class="nav active" data-page="home">Home</button>
+      <button class="nav" data-page="bio">Biography</button>
+      <button class="nav" data-page="contact">Contact</button>
+    </nav>
+  </div>
 </header>
 
 <main class="container">
 
-<section id="home" class="page active">
-<h1>Portfolio</h1>
-<div class="grid" id="categoryGrid"></div>
-</section>
+  <section id="home" class="page active">
+    <h1>Portfolio</h1>
+    <div class="grid" id="categoryGrid"></div>
+  </section>
 
-<section id="portfolio" class="page">
-<h1 id="portfolioTitle"></h1>
-<div class="grid" id="artworkGrid"></div>
-</section>
+  <section id="portfolio" class="page">
+    <h1 id="portfolioTitle"></h1>
+    <div class="grid" id="artworkGrid"></div>
+  </section>
 
-<section id="bio" class="page">
-<h1>Biography</h1>
-<p style="max-width:700px;line-height:1.8;color:#666">
-Luming Niu is a painter exploring expression, atmosphere, and color relationships. Her work includes portraits, landscapes, abstract paintings, and sketch studies. This section can later include a full artist statement and exhibition history.
-</p>
-</section>
+  <section id="bio" class="page">
+    <h1>Biography</h1>
+    <p style="max-width:700px;line-height:1.8;color:#666">
+      Luming Niu is a painter exploring expression, atmosphere, and color relationships. Her work includes portraits, landscapes, abstract paintings, and sketch studies. This section can later include a full artist statement and exhibition history.
+    </p>
+  </section>
 
-<section id="contact" class="page">
-<h1>Contact</h1>
-<p style="color:#666">For artwork inquiries or commissions:</p>
-<p><b>Email:</b> yourname@email.com</p>
-<p><b>Location:</b> Maryland, USA</p>
-<a class="btn primary" href="mailto:yourname@email.com">Email Inquiry</a>
-</section>
+  <section id="contact" class="page">
+    <h1>Contact</h1>
+    <p style="color:#666">For artwork inquiries or commissions:</p>
+    <p><b>Email:</b> yourname@email.com</p>
+    <p><b>Location:</b> Maryland, USA</p>
+    <a class="btn primary" href="mailto:yourname@email.com">Email Inquiry</a>
+  </section>
 
 </main>
 
 <footer>
-<div class="container">© 2026 Luming Niu. All rights reserved.</div>
+  <div class="container">© 2026 Luming Niu. All rights reserved.</div>
 </footer>
 
 <div class="modal" id="modal">
-<div class="modal-box">
-<button class="close" id="close">×</button>
-<div class="modal-grid">
-<img id="modalImg">
-<div class="modal-info">
-<h2 id="modalTitle"></h2>
-<p id="modalSize" class="meta"></p>
-<p id="modalMedium" class="meta"></p>
-<p id="modalStatus" class="status"></p>
-</div>
-</div>
-</div>
+  <div class="modal-box">
+    <button class="close" id="close">×</button>
+    <div class="modal-grid">
+      <img id="modalImg" alt="Enlarged artwork">
+      <div class="modal-info">
+        <h2 id="modalTitle"></h2>
+        <p id="modalSize" class="meta"></p>
+        <p id="modalMedium" class="meta"></p>
+        <p id="modalStatus" class="status"></p>
+        <p class="note">Click anywhere outside the picture to close it and return to the gallery.</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-
 const artworks={
-people:[
-{title:"Quiet Gaze",size:'24" × 30"',medium:"Oil on canvas",status:"Available",image:"https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=1200&q=80"},
-{title:"Winter Watchers",size:'30" × 40"',medium:"Oil on linen",status:"Sold",image:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80"}
-],
-nature:[
-{title:"Blue Ridge Light",size:'24" × 36"',medium:"Oil on canvas",status:"Available",image:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"},
-{title:"Snow Over Meadow",size:'20" × 24"',medium:"Oil on panel",status:"Available",image:"https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?auto=format&fit=crop&w=1200&q=80"}
-],
-abstract:[
-{title:"Color Drift",size:'18" × 24"',medium:"Oil on canvas",status:"Sold",image:"https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=1200&q=80"},
-{title:"Vibrant Motion",size:'24" × 24"',medium:"Mixed media",status:"Available",image:"https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=1200&q=80"}
-],
-sketch:[
-{title:"Study of Hands",size:'11" × 14"',medium:"Graphite on paper",status:"Available",image:"https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80"},
-{title:"Figure Sketch I",size:'9" × 12"',medium:"Charcoal on paper",status:"Available",image:"https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80"}
-]
+  people:[
+    {title:"Quiet Gaze",size:'24" × 30"',medium:"Oil on canvas",status:"Available",image:"https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=1200&q=80"},
+    {title:"Winter Watchers",size:'30" × 40"',medium:"Oil on linen",status:"Sold",image:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80"}
+  ],
+  nature:[
+    {title:"Blue Ridge Light",size:'24" × 36"',medium:"Oil on canvas",status:"Available",image:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"},
+    {title:"Snow Over Meadow",size:'20" × 24"',medium:"Oil on panel",status:"Available",image:"https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?auto=format&fit=crop&w=1200&q=80"}
+  ],
+  abstract:[
+    {title:"Color Drift",size:'18" × 24"',medium:"Oil on canvas",status:"Sold",image:"https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=1200&q=80"},
+    {title:"Vibrant Motion",size:'24" × 24"',medium:"Mixed media",status:"Available",image:"https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=1200&q=80"}
+  ],
+  sketch:[
+    {title:"Study of Hands",size:'11" × 14"',medium:"Graphite on paper",status:"Available",image:"https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80"},
+    {title:"Figure Sketch I",size:'9" × 12"',medium:"Charcoal on paper",status:"Available",image:"https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80"}
+  ]
 };
 
 const categories=["people","nature","abstract","sketch"];
-
 const categoryGrid=document.getElementById("categoryGrid");
 const artworkGrid=document.getElementById("artworkGrid");
 const portfolioTitle=document.getElementById("portfolioTitle");
+const modal=document.getElementById("modal");
 
 function renderCategories(){
-categoryGrid.innerHTML=categories.map(c=>{
-const img=artworks[c][0].image;
-return `<div class="card" onclick="openPortfolio('${c}')"><img src="${img}"><div class="card-body"><div class="title">${c.charAt(0).toUpperCase()+c.slice(1)}</div></div></div>`
-}).join("");
+  categoryGrid.innerHTML=categories.map(c=>{
+    const img=artworks[c][0].image;
+    const label=c.charAt(0).toUpperCase()+c.slice(1);
+    return `<div class="card" onclick="openPortfolio('${c}')"><img src="${img}" alt="${label}"><div class="card-body"><div class="title">${label}</div></div></div>`;
+  }).join("");
 }
 
 function openPortfolio(cat){
-showPage("portfolio");
-portfolioTitle.textContent=cat.charAt(0).toUpperCase()+cat.slice(1);
-renderArtworks(cat);
+  showPage("portfolio");
+  portfolioTitle.textContent=cat.charAt(0).toUpperCase()+cat.slice(1);
+  renderArtworks(cat);
 }
 
 function renderArtworks(cat){
-artworkGrid.innerHTML=artworks[cat].map((a,i)=>`
-<div class="card">
-<img src="${a.image}" onclick="openModal('${cat}',${i})">
-<div class="card-body">
-<div class="title">${a.title}</div>
-<div class="meta">${a.size}</div>
-<div class="meta">${a.medium}</div>
-<div class="status">${a.status}</div>
-<div class="actions">
-<div class="btn" onclick="openModal('${cat}',${i})">View</div>
-<div class="btn primary" onclick="showPage('contact')">Inquiry</div>
-</div>
-</div>
-</div>`).join("");
+  artworkGrid.innerHTML=artworks[cat].map((a,i)=>`
+    <div class="card">
+      <img src="${a.image}" alt="${a.title}" onclick="openModal('${cat}',${i}); event.stopPropagation();">
+      <div class="card-body">
+        <div class="title">${a.title}</div>
+        <div class="meta">${a.size}</div>
+        <div class="meta">${a.medium}</div>
+        <div class="status">${a.status}</div>
+        <div class="actions">
+          <div class="btn" onclick="openModal('${cat}',${i}); event.stopPropagation();">View</div>
+          <div class="btn primary" onclick="showPage('contact'); event.stopPropagation();">Inquiry</div>
+        </div>
+      </div>
+    </div>`).join("");
 }
 
 function showPage(p){
-document.querySelectorAll(".page").forEach(e=>e.classList.remove("active"));
-document.getElementById(p).classList.add("active");
-document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-document.querySelector(`[data-page='${p}']`)?.classList.add("active");
+  document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));
+  document.getElementById(p).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  const activeBtn=document.querySelector(`[data-page='${p}']`);
+  if(activeBtn){ activeBtn.classList.add('active'); }
 }
-
-const modal=document.getElementById("modal");
 
 function openModal(cat,i){
-const a=artworks[cat][i];
-document.getElementById("modalImg").src=a.image;
-document.getElementById("modalTitle").textContent=a.title;
-document.getElementById("modalSize").textContent="Size: "+a.size;
-document.getElementById("modalMedium").textContent="Medium: "+a.medium;
-document.getElementById("modalStatus").textContent="Status: "+a.status;
-modal.classList.add("open");
+  const a=artworks[cat][i];
+  document.getElementById('modalImg').src=a.image;
+  document.getElementById('modalTitle').textContent=a.title;
+  document.getElementById('modalSize').textContent='Size: '+a.size;
+  document.getElementById('modalMedium').textContent='Medium: '+a.medium;
+  document.getElementById('modalStatus').textContent='Status: '+a.status;
+  modal.classList.add('open');
 }
 
-modal.onclick=e=>{if(e.target===modal)modal.classList.remove("open")}
+modal.onclick=(e)=>{ if(e.target===modal) modal.classList.remove('open'); };
+document.getElementById('close').onclick=()=>modal.classList.remove('open');
 
-document.getElementById("close").onclick=()=>modal.classList.remove("open");
+document.querySelectorAll('.nav').forEach(btn=>{
+  btn.addEventListener('click',()=>showPage(btn.dataset.page));
+});
 
 renderCategories();
-
 </script>
 
 </body>
