@@ -41,6 +41,10 @@ header{
   cursor:pointer;
 }
 
+.brand-accent{
+  color:#b08d57;
+}
+
 nav button{
   margin-left:10px;
   border:none;
@@ -58,7 +62,17 @@ nav button.active{
 .page{display:none;padding:40px 0;}
 .page.active{display:block;}
 
-h1{font-size:36px;margin-bottom:20px;}
+h1{
+  font-size:36px;
+  margin-bottom:20px;
+}
+
+.home-title{
+  font-family:'Playfair Display',serif;
+  font-size:40px;
+  font-weight:600;
+  letter-spacing:0.02em;
+}
 
 .grid{
   display:grid;
@@ -88,6 +102,7 @@ h1{font-size:36px;margin-bottom:20px;}
 .title{
   font-size:22px;
   font-weight:600;
+  font-family:'Inter',sans-serif;
 }
 
 .meta{color:#666;font-size:14px;margin-top:4px;}
@@ -102,6 +117,7 @@ h1{font-size:36px;margin-bottom:20px;}
   border:1px solid #111;
   text-align:center;
   cursor:pointer;
+  background:white;
 }
 
 .btn.primary{background:#111;color:white;}
@@ -143,28 +159,57 @@ footer{
 
 .close{
   position:absolute;
-  top:16px;
-  right:16px;
-  background:white;
+  top:14px;
+  right:14px;
+  background:#111;
+  color:white;
   border-radius:50%;
-  width:40px;
-  height:40px;
-  border:none;
-  font-size:20px;
+  width:52px;
+  height:52px;
+  border:3px solid white;
+  font-size:28px;
+  font-weight:700;
   cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 14px rgba(0,0,0,0.28);
+  z-index:5;
 }
 
+.bio-layout{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:32px;
+  align-items:start;
+}
 
+.bio-photo-placeholder{
+  width:100%;
+  aspect-ratio:4/5;
+  border:2px dashed #d7d7d7;
+  border-radius:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#888;
+  background:#fafafa;
+  font-size:15px;
+  text-align:center;
+  padding:20px;
+}
 
 @media(max-width:900px){
   .grid{grid-template-columns:repeat(2,1fr);} 
   .modal-grid{grid-template-columns:1fr;} 
+  .bio-layout{grid-template-columns:1fr;}
 }
 
 @media(max-width:640px){
   .header-inner{flex-direction:column;align-items:flex-start;gap:14px;}
   .grid{grid-template-columns:1fr;}
   .brand{font-size:38px;}
+  .home-title{font-size:34px;}
 }
 </style>
 </head>
@@ -173,7 +218,7 @@ footer{
 
 <header>
   <div class="container header-inner">
-    <div class="brand" onclick="showPage('home')">Luming Niu Artwork</div>
+    <div class="brand" onclick="goToPage('home')">Luming Niu <span class="brand-accent">Artwork</span></div>
     <nav>
       <button class="nav active" data-page="home">Home</button>
       <button class="nav" data-page="bio">Biography</button>
@@ -185,7 +230,7 @@ footer{
 <main class="container">
 
   <section id="home" class="page active">
-    <h1>Portfolio</h1>
+    <h1 class="home-title">Portfolio</h1>
     <div class="grid" id="categoryGrid"></div>
   </section>
 
@@ -196,9 +241,14 @@ footer{
 
   <section id="bio" class="page">
     <h1>Biography</h1>
-    <p style="max-width:700px;line-height:1.8;color:#666">
-      Luming Niu is a painter exploring expression, atmosphere, and color relationships. Her work includes portraits, landscapes, abstract paintings, and sketch studies. This section can later include a full artist statement and exhibition history.
-    </p>
+    <div class="bio-layout">
+      <div class="bio-photo-placeholder">Photo Placeholder<br>for Artist Portrait</div>
+      <div>
+        <p style="max-width:700px;line-height:1.8;color:#666">
+          Luming Niu is a painter exploring expression, atmosphere, and color relationships. Her work includes portraits, landscapes, abstract paintings, and sketch studies. This section can later include a full artist statement and exhibition history.
+        </p>
+      </div>
+    </div>
   </section>
 
   <section id="contact" class="page">
@@ -217,7 +267,7 @@ footer{
 
 <div class="modal" id="modal">
   <div class="modal-box">
-    <button class="close" id="close">×</button>
+    <button class="close" id="close" aria-label="Close enlarged artwork">×</button>
     <div class="modal-grid">
       <img id="modalImg" alt="Enlarged artwork">
       <div class="modal-info">
@@ -225,7 +275,7 @@ footer{
         <p id="modalSize" class="meta"></p>
         <p id="modalMedium" class="meta"></p>
         <p id="modalStatus" class="status"></p>
-        <div style="margin-top:20px;"><button class="btn primary" onclick="showPage('contact'); modal.classList.remove('open');">Inquiry</button></div>
+        <div style="margin-top:20px;"><button class="btn primary" onclick="goToPage('contact'); closeModal();">Inquiry</button></div>
       </div>
     </div>
   </div>
@@ -266,7 +316,12 @@ function renderCategories(){
 }
 
 function openPortfolio(cat){
-  showPage("portfolio");
+  history.pushState({page:'portfolio', category:cat}, '', '#portfolio-'+cat);
+  renderPortfolioPage(cat);
+}
+
+function renderPortfolioPage(cat){
+  showOnlyPage('portfolio');
   portfolioTitle.textContent=cat.charAt(0).toUpperCase()+cat.slice(1);
   renderArtworks(cat);
 }
@@ -282,18 +337,23 @@ function renderArtworks(cat){
         <div class="status">${a.status}</div>
         <div class="actions">
           <div class="btn" onclick="openModal('${cat}',${i}); event.stopPropagation();">View</div>
-          <div class="btn primary" onclick="showPage('contact'); event.stopPropagation();">Inquiry</div>
+          <div class="btn primary" onclick="goToPage('contact'); event.stopPropagation();">Inquiry</div>
         </div>
       </div>
-    </div>`).join("");
+    </div>`).join('');
 }
 
-function showPage(p){
+function showOnlyPage(p){
   document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));
   document.getElementById(p).classList.add('active');
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
   const activeBtn=document.querySelector(`[data-page='${p}']`);
   if(activeBtn){ activeBtn.classList.add('active'); }
+}
+
+function goToPage(p){
+  history.pushState({page:p}, '', '#'+p);
+  showOnlyPage(p);
 }
 
 function openModal(cat,i){
@@ -306,14 +366,41 @@ function openModal(cat,i){
   modal.classList.add('open');
 }
 
-modal.onclick=(e)=>{ if(e.target===modal) modal.classList.remove('open'); };
-document.getElementById('close').onclick=()=>modal.classList.remove('open');
+function closeModal(){
+  modal.classList.remove('open');
+}
+
+function handleRoute(){
+  const hash=window.location.hash.replace('#','');
+  if(!hash || hash==='home'){
+    showOnlyPage('home');
+    return;
+  }
+  if(hash==='bio' || hash==='contact'){
+    showOnlyPage(hash);
+    return;
+  }
+  if(hash.startsWith('portfolio-')){
+    const cat=hash.replace('portfolio-','');
+    if(categories.includes(cat)){
+      renderPortfolioPage(cat);
+      return;
+    }
+  }
+  showOnlyPage('home');
+}
+
+modal.onclick=(e)=>{ if(e.target===modal) closeModal(); };
+document.getElementById('close').onclick=()=>closeModal();
 
 document.querySelectorAll('.nav').forEach(btn=>{
-  btn.addEventListener('click',()=>showPage(btn.dataset.page));
+  btn.addEventListener('click',()=>goToPage(btn.dataset.page));
 });
 
+window.addEventListener('popstate', handleRoute);
+
 renderCategories();
+handleRoute();
 </script>
 
 </body>
