@@ -1,306 +1,403 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Luming Niu Artwork</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    body { margin: 0; font-family: 'Inter', sans-serif; background: #fff; color: #222; }
-    * { box-sizing: border-box; }
-    header { position: sticky; top: 0; background: white; border-bottom: 1px solid #eee; z-index: 10; }
-    .container { width: min(1200px, 92%); margin: auto; }
-    .header-inner { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; gap: 16px; }
-    .brand { font-family: 'Playfair Display', serif; font-size: 46px; font-weight: 700; cursor: pointer; }
-    .brand-accent { color: #c9a54a; }
-    nav button { margin-left: 10px; border: none; padding: 10px 16px; border-radius: 20px; background: #f3f3f3; cursor: pointer; }
-    nav button.active { background: #111; color: white; }
-    .page { display: none; padding: 40px 0; }
-    .page.active { display: block; }
-    .heading { font-size: 36px; margin: 0 0 20px; }
-    .home-title { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 600; letter-spacing: 0.02em; margin: 0 0 20px; }
-    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-    .card { border: 1px solid #eee; border-radius: 20px; overflow: hidden; background: white; cursor: pointer; }
-    .card img { width: 100%; height: 260px; object-fit: cover; display: block; background: #f2f2f2; }
-    .card-body { padding: 16px; }
-    .title { font-size: 22px; font-weight: 600; }
-    .meta { color: #666; font-size: 14px; margin-top: 4px; }
-    .status { margin-top: 6px; font-weight: 600; font-size: 14px; }
-    .actions { margin-top: 12px; display: flex; gap: 8px; }
-    .btn { flex: 1; border-radius: 14px; padding: 10px; border: 1px solid #111; text-align: center; cursor: pointer; background: white; }
-    .btn.primary { background: #111; color: white; }
-    .footer { border-top: 1px solid #eee; padding: 24px 0; color: #777; font-size: 14px; margin-top: 20px; }
-    .modal { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 50; }
-    .modal.open { display: flex; }
-    .modal-box { position: relative; background: white; border-radius: 20px; overflow: hidden; width: min(1000px, 95%); }
-    .modal-grid { display: grid; grid-template-columns: 1.5fr 1fr; }
-    .modal img { width: 100%; height: 70vh; object-fit: contain; background: #f5f5f5; display: block; }
-    .modal-info { padding: 20px; }
-    .close { position: absolute; top: 16px; right: 16px; background: white; color: #333; border-radius: 50%; width: 40px; height: 40px; border: 2px solid #ddd; font-size: 22px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,.15); z-index: 5; }
-    .bio-layout { display: grid; grid-template-columns: 320px 1fr; gap: 32px; align-items: start; }
-    .bio-image { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 22px; display: block; }
-    .category-nav { display: flex; gap: 14px; margin-bottom: 24px; flex-wrap: wrap; }
-    .category-pill { border: none; padding: 10px 16px; border-radius: 20px; cursor: pointer; background: #f3f3f3; color: #222; }
-    .category-pill.active { background: #111; color: white; }
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: repeat(2, 1fr); }
-      .modal-grid { grid-template-columns: 1fr; }
-      .bio-layout { grid-template-columns: 1fr; }
+import React, { useEffect, useMemo, useState } from "react";
+
+type CategoryKey = "people" | "nature" | "abstract" | "sketch";
+
+type Artwork = {
+  title: string;
+  size: string;
+  medium: string;
+  status: "Available" | "Sold";
+  image: string;
+};
+
+type Route =
+  | { page: "home" }
+  | { page: "bio" }
+  | { page: "contact" }
+  | { page: "portfolio"; category: CategoryKey };
+
+const categories: CategoryKey[] = ["people", "nature", "abstract", "sketch"];
+
+const artworks: Record<CategoryKey, Artwork[]> = {
+  people: [
+    {
+      title: "Quiet Gaze",
+      size: '24" × 30"',
+      medium: "Oil on canvas",
+      status: "Available",
+      image:
+        "https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      title: "Winter Watchers",
+      size: '30" × 40"',
+      medium: "Oil on linen",
+      status: "Sold",
+      image:
+        "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80",
+    },
+  ],
+  nature: [
+    {
+      title: "Blue Ridge Light",
+      size: '24" × 36"',
+      medium: "Oil on canvas",
+      status: "Available",
+      image:
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      title: "Snow Over Meadow",
+      size: '20" × 24"',
+      medium: "Oil on panel",
+      status: "Available",
+      image:
+        "https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?auto=format&fit=crop&w=1200&q=80",
+    },
+  ],
+  abstract: [
+    { title: "Untitled 1", size: '9"x12"', medium: "Oil/cold wax on paper", status: "Sold", image: "images/abstract/painting1.jpg" },
+    { title: "Untitled 2", size: '9"x12"', medium: "Oil/cold wax on paper", status: "Sold", image: "images/abstract/painting2.jpg" },
+    { title: "Untitled 3", size: '9"x12"', medium: "Oil/cold wax on paper", status: "Available", image: "images/abstract/painting3.jpg" },
+    { title: "Untitled 4", size: '12"x16"', medium: "Oil/cold wax on paper", status: "Available", image: "images/abstract/painting4.jpg" },
+    { title: "Untitled 5", size: '9"x12"', medium: "Oil/cold wax on paper", status: "Available", image: "images/abstract/painting5.jpg" },
+    { title: "Untitled 6", size: '9"x12"', medium: "Oil/cold wax on paper", status: "Available", image: "images/abstract/painting6.jpg" },
+    { title: "Untitled 7", size: '12"x9"', medium: "Oil/cold wax on paper", status: "Available", image: "images/abstract/painting7.jpg" },
+    { title: "Untitled 8", size: '9"x12"', medium: "Oil/cold wax on paper", status: "Sold", image: "images/abstract/painting8.jpg" },
+    { title: "Untitled 9", size: '11"x14"', medium: "Oil/cold wax on wood panel", status: "Sold", image: "images/abstract/painting9.jpg" },
+    { title: "Untitled 10", size: '11"x14"', medium: "Oil/cold wax on wood panel", status: "Available", image: "images/abstract/painting10.jpg" },
+    { title: "Untitled 11", size: '16"x12"', medium: "Oil/cold wax on paper", status: "Available", image: "images/abstract/painting11.jpg" },
+    { title: "Untitled 12", size: '12"x16"', medium: "Oil/cold wax on paper", status: "Available", image: "images/abstract/painting12.jpg" },
+    { title: "Untitled 13", size: '11"x14"', medium: "Oil/cold wax on paper", status: "Available", image: "images/abstract/painting13.jpg" },
+    { title: "Untitled 14", size: '11"x14"', medium: "Oil/cold wax on paper", status: "Available", image: "images/abstract/painting14.jpg" },
+    { title: "Untitled 15", size: '12"x16"', medium: "Oil/cold wax on paper", status: "Available", image: "images/abstract/painting15.jpg" },
+    { title: "Untitled 16", size: '12"x16"', medium: "Oil/cold wax on paper", status: "Available", image: "images/abstract/painting16.jpg" },
+    { title: "Untitled 17", size: '12"x16"', medium: "Oil/cold wax on paper", status: "Available", image: "images/abstract/painting17.jpg" },
+    { title: "Untitled 18", size: '9"x12"', medium: "Oil/cold wax on paper", status: "Sold", image: "images/abstract/painting18.jpg" },
+    { title: "Untitled 19", size: '9"x12"', medium: "Oil/cold wax on paper", status: "Available", image: "images/abstract/painting19.jpg" },
+    { title: "Untitled 20", size: '9"x12"', medium: "Oil/cold wax on paper", status: "Available", image: "images/abstract/painting20.jpg" },
+    { title: "Untitled 21", size: '9"x12"', medium: "Oil/cold wax on paper", status: "Available", image: "images/abstract/painting21.jpg" },
+  ],
+  sketch: [
+    {
+      title: "Study of Hands",
+      size: '11" × 14"',
+      medium: "Graphite on paper",
+      status: "Available",
+      image:
+        "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      title: "Figure Sketch I",
+      size: '9" × 12"',
+      medium: "Charcoal on paper",
+      status: "Available",
+      image:
+        "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80",
+    },
+  ],
+};
+
+function labelForCategory(category: CategoryKey): string {
+  return category.charAt(0).toUpperCase() + category.slice(1);
+}
+
+function parseHash(hash: string): Route {
+  const clean = hash.replace(/^#/, "");
+  if (!clean || clean === "home") return { page: "home" };
+  if (clean === "bio") return { page: "bio" };
+  if (clean === "contact") return { page: "contact" };
+  if (clean.startsWith("portfolio-")) {
+    const category = clean.replace("portfolio-", "") as CategoryKey;
+    if (categories.includes(category)) return { page: "portfolio", category };
+  }
+  return { page: "home" };
+}
+
+function hashForRoute(route: Route): string {
+  switch (route.page) {
+    case "home":
+      return "#home";
+    case "bio":
+      return "#bio";
+    case "contact":
+      return "#contact";
+    case "portfolio":
+      return `#portfolio-${route.category}`;
+  }
+}
+
+function buildImageCandidates(src: string): string[] {
+  const normalized = src.replace(/^\/+/, "");
+  const match = normalized.match(/^(.*)\.(jpg|jpeg|png|webp)$/i);
+  if (!match) return [src];
+
+  const bareBase = match[1].replace(/^images\//, "");
+  const exts = ["jpg", "jpeg", "png", "webp", "JPG", "JPEG", "PNG", "WEBP"];
+  const roots = ["", "/", "images/", "/images/"];
+  const set = new Set<string>([src]);
+
+  for (const root of roots) {
+    for (const ext of exts) {
+      set.add(`${root}${bareBase}.${ext}`);
     }
-    @media (max-width: 640px) {
-      .header-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
-      .grid { grid-template-columns: 1fr; }
-      .brand { font-size: 38px; }
-      .home-title { font-size: 34px; }
-      nav button { margin-left: 0; margin-right: 10px; }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="container header-inner">
-      <div class="brand" onclick="goToPage('home')">Luming Niu <span class="brand-accent">Artwork</span></div>
-      <nav>
-        <button class="nav active" data-page="home">Home</button>
-        <button class="nav" data-page="bio">Biography</button>
-        <button class="nav" data-page="contact">Contact</button>
-      </nav>
-    </div>
-  </header>
+  }
+  return Array.from(set);
+}
 
-  <main class="container">
-    <section id="home" class="page active">
-      <h1 class="home-title">Portfolio</h1>
-      <div class="grid" id="categoryGrid"></div>
-    </section>
+function SmartImage(props: {
+  src: string;
+  alt: string;
+  className?: string;
+  onClick?: () => void;
+}) {
+  const { src, alt, className, onClick } = props;
+  const candidates = useMemo(() => buildImageCandidates(src), [src]);
+  const [idx, setIdx] = useState(0);
+  const [done, setDone] = useState(false);
 
-    <section id="portfolio" class="page">
-      <h1 id="portfolioTitle" class="home-title"></h1>
-      <div id="categoryNav" class="category-nav"></div>
-      <div class="grid" id="artworkGrid"></div>
-    </section>
+  useEffect(() => {
+    setIdx(0);
+    setDone(false);
+  }, [src]);
 
-    <section id="bio" class="page">
-      <h1 class="heading">Biography</h1>
-      <div class="bio-layout">
-        <img class="bio-image" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80" alt="Artist portrait" />
-        <div>
-          <p class="meta" style="max-width: 700px; line-height: 1.8; font-size: 16px;">
-            Luming Niu is a painter exploring expression, atmosphere, and color relationships. Her work includes portraits, landscapes, abstract paintings, and sketch studies. This section can later include a full artist statement and exhibition history.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="page">
-      <h1 class="heading">Contact</h1>
-      <p class="meta" style="font-size: 16px;">For artwork inquiries or commissions:</p>
-      <p><b>Email:</b> yourname@email.com</p>
-      <p><b>Location:</b> Maryland, USA</p>
-      <a class="btn primary" href="mailto:yourname@email.com" style="display: inline-block; flex: unset;">Email Inquiry</a>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container">© 2026 Luming Niu. All rights reserved.</div>
-  </footer>
-
-  <div class="modal" id="modal">
-    <div class="modal-box">
-      <button class="close" id="close" aria-label="Close enlarged artwork">×</button>
-      <div class="modal-grid">
-        <img id="modalImg" alt="Enlarged artwork" />
-        <div class="modal-info">
-          <h2 id="modalTitle"></h2>
-          <p id="modalSize" class="meta"></p>
-          <p id="modalMedium" class="meta"></p>
-          <p id="modalStatus" class="status"></p>
-          <div style="margin-top: 20px;"><button class="btn primary" onclick="goToPage('contact'); closeModal();">Inquiry</button></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const artworks = {
-      people: [
-        { title: "Quiet Gaze", size: '24" × 30"', medium: "Oil on canvas", status: "Available", image: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=1200&q=80" },
-        { title: "Winter Watchers", size: '30" × 40"', medium: "Oil on linen", status: "Sold", image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80" }
-      ],
-      nature: [
-        { title: "Blue Ridge Light", size: '24" × 36"', medium: "Oil on canvas", status: "Available", image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80" },
-        { title: "Snow Over Meadow", size: '20" × 24"', medium: "Oil on panel", status: "Available", image: "https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?auto=format&fit=crop&w=1200&q=80" }
-      ],
-      abstract: Array.from({ length: 21 }, (_, index) => ({
-        title: `Untitled ${index + 1}`,
-        size: "",
-        medium: "",
-        status: "Available",
-        image: `images/abstract/painting${index + 1}.jpg`
-      })),
-      sketch: [
-        { title: "Study of Hands", size: '11" × 14"', medium: "Graphite on paper", status: "Available", image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80" },
-        { title: "Figure Sketch I", size: '9" × 12"', medium: "Charcoal on paper", status: "Available", image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80" }
-      ]
-    };
-
-    const categories = ["people", "nature", "abstract", "sketch"];
-    const categoryGrid = document.getElementById('categoryGrid');
-    const artworkGrid = document.getElementById('artworkGrid');
-    const portfolioTitle = document.getElementById('portfolioTitle');
-    const categoryNav = document.getElementById('categoryNav');
-    const modal = document.getElementById('modal');
-    const modalImg = document.getElementById('modalImg');
-
-    function labelForCategory(category) {
-      return category.charAt(0).toUpperCase() + category.slice(1);
-    }
-
-    function withFallback(src, attempt) {
-      const normalized = src.replace(/^\/+/, '');
-      const match = normalized.match(/^(.*)\.(jpg|jpeg|png|webp)$/i);
-      if (!match) return src;
-
-      const base = match[1];
-      const extList = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'JPEG', 'PNG', 'WEBP'];
-      const rootList = ['', '/', 'images/', '/images/'];
-      const candidates = [];
-
-      for (const root of rootList) {
-        for (const ext of extList) {
-          candidates.push(`${root}${base}.${ext}`);
-        }
-      }
-      return candidates[attempt] || src;
-    }
-
-    function attachFallback(img, originalSrc) {
-      img.dataset.originalSrc = originalSrc;
-      img.dataset.attempt = '0';
-      img.onerror = function () {
-        const attempt = Number(img.dataset.attempt || '0') + 1;
-        img.dataset.attempt = String(attempt);
-        const next = withFallback(originalSrc, attempt);
-        if (next !== img.src) {
-          img.src = next;
+  return (
+    <img
+      src={candidates[idx]}
+      alt={alt}
+      className={className}
+      onClick={onClick}
+      onError={() => {
+        if (idx < candidates.length - 1) {
+          setIdx((prev) => prev + 1);
         } else {
-          img.onerror = null;
-          img.style.background = '#f2f2f2';
+          setDone(true);
         }
-      };
+      }}
+      style={done ? { background: "#f2f2f2" } : undefined}
+    />
+  );
+}
+
+export default function LumingArtPortfolioSite() {
+  const [route, setRoute] = useState<Route>(() => {
+    if (typeof window === "undefined") return { page: "home" };
+    return parseHash(window.location.hash);
+  });
+  const [selectedArtwork, setSelectedArtwork] = useState<{ category: CategoryKey; index: number } | null>(null);
+
+  useEffect(() => {
+    const syncRoute = () => setRoute(parseHash(window.location.hash));
+    window.addEventListener("hashchange", syncRoute);
+    window.addEventListener("popstate", syncRoute);
+    if (!window.location.hash) {
+      window.history.replaceState({}, "", "#home");
+    } else {
+      syncRoute();
     }
+    return () => {
+      window.removeEventListener("hashchange", syncRoute);
+      window.removeEventListener("popstate", syncRoute);
+    };
+  }, []);
 
-    function renderCategories() {
-      categoryGrid.innerHTML = categories.map(category => {
-        const image = artworks[category][0].image;
-        return `
-          <div class="card" onclick="openPortfolio('${category}')">
-            <img data-src="${image}" alt="${labelForCategory(category)}" />
-            <div class="card-body"><div class="title">${labelForCategory(category)}</div></div>
-          </div>`;
-      }).join('');
-
-      categoryGrid.querySelectorAll('img').forEach(img => {
-        const src = img.getAttribute('data-src');
-        attachFallback(img, src);
-        img.src = src;
-      });
+  const goToRoute = (nextRoute: Route) => {
+    const nextHash = hashForRoute(nextRoute);
+    if (typeof window !== "undefined" && window.location.hash !== nextHash) {
+      window.history.pushState({}, "", nextHash);
     }
+    setRoute(nextRoute);
+  };
 
-    function renderCategoryNav(active) {
-      categoryNav.innerHTML = categories.map(category => `
-        <button class="category-pill ${category === active ? 'active' : ''}" onclick="openPortfolio('${category}')">
-          ${labelForCategory(category)}
-        </button>`).join('');
-    }
+  const activeCategory: CategoryKey = route.page === "portfolio" ? route.category : "people";
 
-    function renderArtworks(category) {
-      artworkGrid.innerHTML = artworks[category].map((artwork, index) => `
-        <div class="card">
-          <img data-src="${artwork.image}" alt="${artwork.title}" onclick="openModal('${category}', ${index}); event.stopPropagation();" />
-          <div class="card-body">
-            <div class="title">${artwork.title}</div>
-            ${artwork.size ? `<div class="meta">${artwork.size}</div>` : ''}
-            ${artwork.medium ? `<div class="meta">${artwork.medium}</div>` : ''}
-            <div class="status">${artwork.status}</div>
-            <div class="actions">
-              <div class="btn" onclick="openModal('${category}', ${index}); event.stopPropagation();">View</div>
-              <div class="btn primary" onclick="goToPage('contact'); event.stopPropagation();">Inquiry</div>
+  const modalArtwork = useMemo(() => {
+    if (!selectedArtwork) return null;
+    return artworks[selectedArtwork.category][selectedArtwork.index] ?? null;
+  }, [selectedArtwork]);
+
+  return (
+    <div className="site-root">
+      <style>{`
+        .site-root { margin: 0; font-family: 'Inter', sans-serif; background: #fff; color: #222; min-height: 100vh; }
+        .site-root * { box-sizing: border-box; }
+        .site-root button, .site-root a { font: inherit; }
+        .site-root a { text-decoration: none; color: inherit; }
+        .header { position: sticky; top: 0; background: white; border-bottom: 1px solid #eee; z-index: 10; }
+        .container { width: min(1200px, 92%); margin: auto; }
+        .headerInner { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; gap: 16px; }
+        .brand { font-family: 'Playfair Display', serif; font-size: 46px; font-weight: 700; cursor: pointer; background: none; border: none; padding: 0; }
+        .brandAccent { color: #c9a54a; }
+        .navButton { margin-left: 10px; border: none; padding: 10px 16px; border-radius: 20px; background: #f3f3f3; cursor: pointer; }
+        .navButton.active { background: #111; color: white; }
+        .page { padding: 40px 0; }
+        .hidden { display: none; }
+        .heading { font-size: 36px; margin: 0 0 20px; }
+        .homeTitle { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 600; letter-spacing: 0.02em; margin: 0 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .card { border: 1px solid #eee; border-radius: 20px; overflow: hidden; background: white; cursor: pointer; }
+        .cardImage { width: 100%; height: 260px; object-fit: cover; display: block; background: #f2f2f2; }
+        .cardBody { padding: 16px; }
+        .title { font-size: 22px; font-weight: 600; }
+        .meta { color: #666; font-size: 14px; margin-top: 4px; }
+        .status { margin-top: 6px; font-weight: 600; font-size: 14px; }
+        .actions { margin-top: 12px; display: flex; gap: 8px; }
+        .btn { flex: 1; border-radius: 14px; padding: 10px; border: 1px solid #111; text-align: center; cursor: pointer; background: white; }
+        .btn.primary { background: #111; color: white; }
+        .footer { border-top: 1px solid #eee; padding: 24px 0; color: #777; font-size: 14px; margin-top: 20px; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 50; }
+        .modalBox { position: relative; background: white; border-radius: 20px; overflow: hidden; width: min(1000px, 95%); }
+        .modalGrid { display: grid; grid-template-columns: 1.5fr 1fr; }
+        .modalImage { width: 100%; height: 70vh; object-fit: contain; background: #f5f5f5; display: block; }
+        .modalInfo { padding: 20px; }
+        .close { position: absolute; top: 16px; right: 16px; background: white; color: #333; border-radius: 50%; width: 40px; height: 40px; border: 2px solid #ddd; font-size: 22px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,.15); z-index: 5; }
+        .bioLayout { display: grid; grid-template-columns: 320px 1fr; gap: 32px; align-items: start; }
+        .bioImage { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 22px; display: block; }
+        .categoryNav { display: flex; gap: 14px; margin-bottom: 24px; flex-wrap: wrap; }
+        .categoryPill { border: none; padding: 10px 16px; border-radius: 20px; cursor: pointer; background: #f3f3f3; color: #222; }
+        .categoryPill.active { background: #111; color: white; }
+        @media (max-width: 900px) {
+          .grid { grid-template-columns: repeat(2, 1fr); }
+          .modalGrid { grid-template-columns: 1fr; }
+          .bioLayout { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 640px) {
+          .headerInner { flex-direction: column; align-items: flex-start; gap: 14px; }
+          .grid { grid-template-columns: 1fr; }
+          .brand { font-size: 38px; }
+          .homeTitle { font-size: 34px; }
+          .navButton { margin-left: 0; margin-right: 10px; }
+        }
+      `}</style>
+
+      <header className="header">
+        <div className="container headerInner">
+          <button className="brand" onClick={() => goToRoute({ page: "home" })}>
+            Luming Niu <span className="brandAccent">Artwork</span>
+          </button>
+          <nav>
+            <button className={`navButton ${route.page === "home" ? "active" : ""}`} onClick={() => goToRoute({ page: "home" })}>Home</button>
+            <button className={`navButton ${route.page === "bio" ? "active" : ""}`} onClick={() => goToRoute({ page: "bio" })}>Biography</button>
+            <button className={`navButton ${route.page === "contact" ? "active" : ""}`} onClick={() => goToRoute({ page: "contact" })}>Contact</button>
+          </nav>
+        </div>
+      </header>
+
+      <main className="container">
+        <section className={route.page === "home" ? "page" : "page hidden"}>
+          <h1 className="homeTitle">Portfolio</h1>
+          <div className="grid">
+            {categories.map((category) => (
+              <div key={category} className="card" onClick={() => goToRoute({ page: "portfolio", category })}>
+                <SmartImage src={artworks[category][0].image} alt={labelForCategory(category)} className="cardImage" />
+                <div className="cardBody">
+                  <div className="title">{labelForCategory(category)}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className={route.page === "portfolio" ? "page" : "page hidden"}>
+          <h1 className="homeTitle">{labelForCategory(activeCategory)}</h1>
+          <div className="categoryNav">
+            {categories.map((category) => (
+              <button
+                key={category}
+                className={`categoryPill ${category === activeCategory ? "active" : ""}`}
+                onClick={() => goToRoute({ page: "portfolio", category })}
+              >
+                {labelForCategory(category)}
+              </button>
+            ))}
+          </div>
+          <div className="grid">
+            {artworks[activeCategory].map((artwork, index) => (
+              <div key={`${activeCategory}-${index}`} className="card">
+                <SmartImage
+                  src={artwork.image}
+                  alt={artwork.title}
+                  className="cardImage"
+                  onClick={() => setSelectedArtwork({ category: activeCategory, index })}
+                />
+                <div className="cardBody">
+                  <div className="title">{artwork.title}</div>
+                  {artwork.size ? <div className="meta">{artwork.size}</div> : null}
+                  {artwork.medium ? <div className="meta">{artwork.medium}</div> : null}
+                  <div className="status">{artwork.status}</div>
+                  <div className="actions">
+                    <button className="btn" onClick={() => setSelectedArtwork({ category: activeCategory, index })}>View</button>
+                    <button className="btn primary" onClick={() => goToRoute({ page: "contact" })}>Inquiry</button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className={route.page === "bio" ? "page" : "page hidden"}>
+          <h1 className="heading">Biography</h1>
+          <div className="bioLayout">
+            <SmartImage
+              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80"
+              alt="Artist portrait"
+              className="bioImage"
+            />
+            <div>
+              <p className="meta" style={{ maxWidth: 700, lineHeight: 1.8, fontSize: 16 }}>
+                Luming Niu is a painter exploring expression, atmosphere, and color relationships. Her work includes portraits, landscapes, abstract paintings, and sketch studies. This section can later include a full artist statement and exhibition history.
+              </p>
             </div>
           </div>
-        </div>`).join('');
+        </section>
 
-      artworkGrid.querySelectorAll('img').forEach(img => {
-        const src = img.getAttribute('data-src');
-        attachFallback(img, src);
-        img.src = src;
-      });
-    }
+        <section className={route.page === "contact" ? "page" : "page hidden"}>
+          <h1 className="heading">Contact</h1>
+          <p className="meta" style={{ fontSize: 16 }}>For artwork inquiries or commissions:</p>
+          <p><b>Email:</b> yourname@email.com</p>
+          <p><b>Location:</b> Maryland, USA</p>
+          <a className="btn primary" href="mailto:yourname@email.com" style={{ display: "inline-block", flex: "unset" }}>Email Inquiry</a>
+        </section>
+      </main>
 
-    function showOnlyPage(page) {
-      document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
-      document.getElementById(page).classList.add('active');
-      document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
-      const activeBtn = document.querySelector(`[data-page='${page}']`);
-      if (activeBtn) activeBtn.classList.add('active');
-    }
+      <footer className="footer">
+        <div className="container">© 2026 Luming Niu. All rights reserved.</div>
+      </footer>
 
-    function goToPage(page) {
-      history.pushState({ page }, '', '#' + page);
-      showOnlyPage(page);
-    }
+      {modalArtwork ? (
+        <div className="modal" onClick={(event) => { if (event.target === event.currentTarget) setSelectedArtwork(null); }}>
+          <div className="modalBox">
+            <button className="close" aria-label="Close enlarged artwork" onClick={() => setSelectedArtwork(null)}>×</button>
+            <div className="modalGrid">
+              <SmartImage src={modalArtwork.image} alt={modalArtwork.title} className="modalImage" />
+              <div className="modalInfo">
+                <h2>{modalArtwork.title}</h2>
+                {modalArtwork.size ? <p className="meta">Size: {modalArtwork.size}</p> : null}
+                {modalArtwork.medium ? <p className="meta">Medium: {modalArtwork.medium}</p> : null}
+                <p className="status">Status: {modalArtwork.status}</p>
+                <div style={{ marginTop: 20 }}>
+                  <button
+                    className="btn primary"
+                    onClick={() => {
+                      setSelectedArtwork(null);
+                      goToRoute({ page: "contact" });
+                    }}
+                  >
+                    Inquiry
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
 
-    function openPortfolio(category) {
-      history.pushState({ page: 'portfolio', category }, '', '#portfolio-' + category);
-      showOnlyPage('portfolio');
-      portfolioTitle.textContent = labelForCategory(category);
-      renderCategoryNav(category);
-      renderArtworks(category);
-    }
-
-    function openModal(category, index) {
-      const artwork = artworks[category][index];
-      modalImg.dataset.attempt = '0';
-      attachFallback(modalImg, artwork.image);
-      modalImg.src = artwork.image;
-      document.getElementById('modalTitle').textContent = artwork.title;
-      document.getElementById('modalSize').textContent = artwork.size ? 'Size: ' + artwork.size : '';
-      document.getElementById('modalMedium').textContent = artwork.medium ? 'Medium: ' + artwork.medium : '';
-      document.getElementById('modalStatus').textContent = 'Status: ' + artwork.status;
-      modal.classList.add('open');
-    }
-
-    function closeModal() {
-      modal.classList.remove('open');
-    }
-
-    function handleRoute() {
-      const hash = window.location.hash.replace('#', '');
-      if (!hash || hash === 'home') {
-        showOnlyPage('home');
-        return;
-      }
-      if (hash === 'bio' || hash === 'contact') {
-        showOnlyPage(hash);
-        return;
-      }
-      if (hash.startsWith('portfolio-')) {
-        const category = hash.replace('portfolio-', '');
-        if (categories.includes(category)) {
-          openPortfolio(category);
-          return;
-        }
-      }
-      showOnlyPage('home');
-    }
-
-    modal.onclick = (e) => { if (e.target === modal) closeModal(); };
-    document.getElementById('close').onclick = closeModal;
-    document.querySelectorAll('.nav').forEach(btn => btn.addEventListener('click', () => goToPage(btn.dataset.page)));
-    window.addEventListener('popstate', handleRoute);
-
-    renderCategories();
-    handleRoute();
-  </script>
-</body>
-</html>
+if (typeof window !== "undefined") {
+  console.assert(categories.length === 4, "Expected 4 categories.");
+  console.assert(artworks.abstract.length === 21, "Expected 21 abstract paintings.");
+  console.assert(artworks.abstract[0].title === "Untitled 1", "Expected first abstract title.");
+  console.assert(artworks.abstract[20].title === "Untitled 21", "Expected last abstract title.");
+}
