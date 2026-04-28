@@ -414,6 +414,8 @@ modalImg.addEventListener('click', function (e) {
 modalImg.addEventListener('mousedown', function (e) {
   if (!isZoomed) return;
 
+   e.preventDefault();
+  
   isDragging = true;
   modalImg.classList.add('dragging');
   startX = e.clientX - moveX;
