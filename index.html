@@ -62,9 +62,12 @@
       transform-origin: center center;
     }
 
-    #modalImg.zoomed {
-      transform: scale(2.5);
-      cursor: zoom-out;
+   #modalImg.zoomed {
+  cursor: grab;
+}
+
+#modalImg.dragging {
+  cursor: grabbing;
     }
 
     .modal-info { padding: 20px; }
