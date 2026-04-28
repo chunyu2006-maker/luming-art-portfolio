@@ -344,10 +344,14 @@ updateZoomTransform();
       modal.classList.add('open');
     }
 
-    function closeModal() {
-      modal.classList.remove('open');
-      modalImg.classList.remove('zoomed');
-    }
+   function closeModal() {
+  modal.classList.remove('open');
+
+  isZoomed = false;
+  moveX = 0;
+  moveY = 0;
+  updateZoomTransform();
+}
 
     function handleRoute() {
       const hash = window.location.hash.replace('#', '');
