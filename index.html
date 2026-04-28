@@ -54,6 +54,15 @@
       .home-title { font-size: 34px; }
       nav button { margin-left: 0; margin-right: 10px; }
     }
+    .modal img {
+  cursor: zoom-in;
+  transition: transform 0.25s ease;
+}
+
+.modal img.zoomed {
+  transform: scale(1.8);
+  cursor: zoom-out;
+}
   </style>
 </head>
 <body>
@@ -167,6 +176,10 @@
     const categoryNav = document.getElementById('categoryNav');
     const modal = document.getElementById('modal');
     const modalImg = document.getElementById('modalImg');
+    modalImg.onclick = function (e) {
+  e.stopPropagation();
+  modalImg.classList.toggle('zoomed');
+};
 
     function labelForCategory(category) {
       return category.charAt(0).toUpperCase() + category.slice(1);
@@ -267,6 +280,7 @@
 
     function openModal(category, index) {
       const artwork = artworks[category][index];
+      modalImg.classList.remove('zoomed');
       attachFallback(modalImg, artwork.image);
       document.getElementById('modalTitle').textContent = artwork.title;
       document.getElementById('modalSize').textContent = artwork.size ? 'Size: ' + artwork.size : '';
@@ -277,6 +291,7 @@
 
     function closeModal() {
       modal.classList.remove('open');
+      modalImg.classList.remove('zoomed');
     }
 
     function handleRoute() {
