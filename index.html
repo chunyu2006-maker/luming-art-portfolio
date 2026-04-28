@@ -237,6 +237,9 @@
           ${labelForCategory(category)}
         </button>`).join('');
     }
+    function getThumbnail(path) {
+  return path.replace(/\.(jpg|jpeg|png|webp)$/i, '-thumb.$1');
+}
 
     function renderArtworks(category) {
       artworkGrid.innerHTML = artworks[category].map((artwork, index) => `
