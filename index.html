@@ -373,10 +373,55 @@
       showOnlyPage('home');
     }
 
-    modalImg.addEventListener('click', function (e) {
-      e.stopPropagation();
-      modalImg.classList.toggle('zoomed');
-    });
+    let isZoomed = false;
+let isDragging = false;
+let startX = 0;
+let startY = 0;
+let moveX = 0;
+let moveY = 0;
+
+function updateZoomTransform() {
+  modalImg.style.transform = isZoomed
+    ? `translate(${moveX}px, ${moveY}px) scale(2.5)`
+    : 'translate(0px, 0px) scale(1)';
+}
+
+modalImg.addEventListener('click', function (e) {
+  e.stopPropagation();
+
+  if (isDragging) return;
+
+  isZoomed = !isZoomed;
+
+  if (!isZoomed) {
+    moveX = 0;
+    moveY = 0;
+  }
+
+  updateZoomTransform();
+});
+
+modalImg.addEventListener('mousedown', function (e) {
+  if (!isZoomed) return;
+
+  isDragging = true;
+  modalImg.classList.add('dragging');
+  startX = e.clientX - moveX;
+  startY = e.clientY - moveY;
+});
+
+window.addEventListener('mousemove', function (e) {
+  if (!isDragging) return;
+
+  moveX = e.clientX - startX;
+  moveY = e.clientY - startY;
+  updateZoomTransform();
+});
+
+window.addEventListener('mouseup', function () {
+  isDragging = false;
+  modalImg.classList.remove('dragging');
+});
 
     modal.onclick = function (e) {
       if (e.target === modal) closeModal();
