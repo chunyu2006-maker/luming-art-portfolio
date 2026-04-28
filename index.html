@@ -228,7 +228,7 @@
     function renderArtworks(category) {
       artworkGrid.innerHTML = artworks[category].map((artwork, index) => `
         <div class="card">
-          <img data-src="${artwork.image}" alt="${artwork.title}" onclick="openModal('${category}', ${index}); event.stopPropagation();" />
+          <img    data-src="${getThumbnail(artwork.image)}"    alt="${artwork.title}"    onclick="openModal('${category}', ${index}); event.stopPropagation();"  />
           <div class="card-body">
             <div class="title">${artwork.title}</div>
             ${artwork.size ? `<div class="meta">${artwork.size}</div>` : ''}
