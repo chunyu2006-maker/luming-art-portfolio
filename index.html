@@ -236,6 +236,8 @@
     const categoryNav = document.getElementById('categoryNav');
     const modal = document.getElementById('modal');
     const modalImg = document.getElementById('modalImg');
+    
+    modalImg.draggable = false;
 
     function labelForCategory(category) {
       return category.charAt(0).toUpperCase() + category.slice(1);
