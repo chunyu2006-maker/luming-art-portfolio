@@ -330,7 +330,10 @@
     function openModal(category, index) {
       const artwork = artworks[category][index];
 
-      modalImg.classList.remove('zoomed');
+     isZoomed = false;
+moveX = 0;
+moveY = 0;
+updateZoomTransform();
       attachImage(modalImg, artwork.image);
 
       document.getElementById('modalTitle').textContent = artwork.title;
