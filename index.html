@@ -409,9 +409,9 @@ updateZoomTransform();
       attachImage(modalImg, artwork.image);
 
       document.getElementById('modalTitle').textContent = artwork.title;
-      document.getElementById('modalSize').textContent = artwork.size ? 'Size: ' + artwork.size : '';
-      document.getElementById('modalMedium').textContent = artwork.medium ? 'Medium: ' + artwork.medium : '';
-      document.getElementById('modalStatus').textContent = 'Status: ' + artwork.status;
+     document.getElementById('modalSize').textContent = artwork.size || '';
+document.getElementById('modalMedium').textContent = artwork.medium || '';
+document.getElementById('modalStatus').textContent = artwork.status || '';
 
       modal.classList.add('open');
     }
