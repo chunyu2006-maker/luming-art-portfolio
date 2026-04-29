@@ -339,9 +339,14 @@
     modalImg.draggable = false;
 
     function labelForCategory(category) {
-      return category.charAt(0).toUpperCase() + category.slice(1);
-    }
+  const labels = {
+    people: "Portraits",
+    nature: "Landscapes",
+    abstract: "Abstract"
+  };
 
+  return labels[category] || category.charAt(0).toUpperCase() + category.slice(1);
+}
     function getThumbnail(path) {
       if (path.startsWith('http')) return path;
       return path.replace(/\.(jpg|jpeg|png|webp)$/i, '-thumb.$1');
