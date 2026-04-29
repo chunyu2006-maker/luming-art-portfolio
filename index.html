@@ -301,31 +301,23 @@
     }
 
     function renderArtworks(category) {
-      artworkGrid.innerHTML = artworks[category].map((artwork, index) => `
-        <div class="card">
-          <img
-            data-src="${getThumbnail(artwork.image)}"
-            data-fallback="${artwork.image}"
-            alt="${artwork.title}"
-            onclick="openModal('${category}', ${index}); event.stopPropagation();"
-          />
-          <div class="card-body">
-            <div class="title">${artwork.title}</div>
-            ${artwork.size ? `<div class="meta">${artwork.size}</div>` : ''}
-            ${artwork.medium ? `<div class="meta">${artwork.medium}</div>` : ''}
-            <div class="status">${artwork.status}</div>
-            <div class="actions">
-              <div class="btn" onclick="openModal('${category}', ${index}); event.stopPropagation();">View</div>
-              <div class="btn primary" onclick="goToPage('contact'); event.stopPropagation();">Inquiry</div>
-            </div>
-          </div>
-        </div>`).join('');
+  artworkGrid.innerHTML = artworks[category].map((artwork, index) => `
+    <div class="card" onclick="openModal('${category}', ${index});">
+      <img
+        data-src="${getThumbnail(artwork.image)}"
+        data-fallback="${artwork.image}"
+        alt="${artwork.title}"
+      />
+      <div class="card-body">
+        <div class="title">${artwork.title}</div>
+        ${artwork.size ? `<div class="meta">${artwork.size}</div>` : ''}
+      </div>
+    </div>`).join('');
 
-      artworkGrid.querySelectorAll('img').forEach(img => {
-        attachImage(img, img.dataset.src, img.dataset.fallback);
-      });
-    }
-
+  artworkGrid.querySelectorAll('img').forEach(img => {
+    attachImage(img, img.dataset.src, img.dataset.fallback);
+  });
+}
     function showOnlyPage(page) {
       document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
       document.getElementById(page).classList.add('active');
