@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" fill="white"/>
 
-  <text x="40%" y="50%" text-anchor="middle"
+  <text x="38%" y="50%" text-anchor="middle"
         font-family="Playfair Display, serif"
         font-size="32"
         fill="#111">L</text>
 
-  <text x="60%" y="56%" text-anchor="middle"
+  <text x="62%" y="58%" text-anchor="middle"
         font-family="Playfair Display, serif"
         font-size="32"
         fill="#111">N</text>
