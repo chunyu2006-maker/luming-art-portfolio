@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" fill="white"/>
-  <text x="50%" y="55%" text-anchor="middle"
+  <text x="50%" y="52%" text-anchor="middle"
         font-family="Playfair Display, serif"
         font-size="32"
         letter-spacing="2"
