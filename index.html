@@ -173,10 +173,15 @@
   .category-nav {
   display: flex;
   gap: 14px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
   background: white;
   padding: 12px 0;
+
+  position: sticky;
+  position: -webkit-sticky;
+  top: 105px;
+  z-index: 20;
 }
     .category-pill { border: none; padding: 10px 16px; border-radius: 20px; cursor: pointer; background: #f3f3f3; color: #222; }
     .category-pill.active { background: #111; color: white; }
