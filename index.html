@@ -799,21 +799,7 @@ window.addEventListener('mouseup', function () {
     };
 
     document.getElementById('close').onclick = closeModal;
-    document.addEventListener('keydown', function (e) {
-  if (!modal.classList.contains('open')) return;
-
-  if (e.key === 'Escape') {
-    closeModal();
-  }
-
-  if (e.key === 'ArrowRight') {
-    changeArtwork(1);
-  }
-
-  if (e.key === 'ArrowLeft') {
-    changeArtwork(-1);
-  }
-});
+   
 document.addEventListener('keydown', function (e) {
   if (!modal.classList.contains('open')) return;
 
