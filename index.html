@@ -291,6 +291,30 @@
   .modal img {
     height: 60vh;
   }
+      /* Always show a subtle overlay on phones */
+
+.card::after {
+  content: "Tap to View";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: auto;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0,0,0,0.45);
+  color: white;
+
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  opacity: 1;
+}
 }
   </style>
 </head>
