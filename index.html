@@ -672,6 +672,8 @@ function openModal(category, index) {
   const artwork = artworks[category][index];
 currentCategory = category;
 currentIndex = index;
+  document.getElementById('modalCounter').textContent =
+  `${index + 1} / ${artworks[category].length}`;
   isZoomed = false;
   moveX = 0;
   moveY = 0;
