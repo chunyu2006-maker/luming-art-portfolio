@@ -549,25 +549,39 @@
 moveX = 0;
 moveY = 0;
 updateZoomTransform();
-      attachImage(modalImg, artwork.image);
+ 
+modalImg.onload = function () {
 
-      document.getElementById('modalTitle').textContent = artwork.title;
-     document.getElementById('modalSize').textContent = artwork.size || '';
-document.getElementById('modalMedium').textContent = artwork.medium || '';
-document.getElementById('modalStatus').textContent = artwork.status || '';
-const onView = document.getElementById('modalOnView');
+  document.getElementById('modalTitle').textContent = artwork.title;
+  document.getElementById('modalSize').textContent = artwork.size || '';
+  document.getElementById('modalMedium').textContent = artwork.medium || '';
+  document.getElementById('modalStatus').textContent = artwork.status || '';
 
-if (artwork.onView) {
-  onView.innerHTML = `
-    <div class="modal-onview-label">CURRENTLY ON VIEW</div>
-    <div class="modal-onview-text">
-      ${artwork.onView.replace(/\n/g, "<br>")}
-    </div>
-  `;
-} else {
-  onView.innerHTML = "";
+  const onView = document.getElementById('modalOnView');
+
+  if (artwork.onView) {
+    onView.innerHTML = `
+      <div class="modal-onview-label">CURRENTLY ON VIEW</div>
+      <div class="modal-onview-text">
+        ${artwork.onView.replace(/\n/g, "<br>")}
+      </div>
+    `;
+  } else {
+    onView.innerHTML = "";
+  }
 }
-      modal.classList.add('open');
+
+modalImg.onload = function () {
+  fillModalInfo();
+  modal.classList.add('open');
+};
+
+modalImg.onerror = function () {
+  fillModalInfo();
+  modal.classList.add('open');
+};
+
+attachImage(modalImg, artwork.image);
     }
 
    function closeModal() {
