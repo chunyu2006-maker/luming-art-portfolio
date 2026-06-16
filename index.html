@@ -641,16 +641,16 @@ modalImg.draggable = false;
       renderCategoryNav(category);
       renderArtworks(category);
     }
-async function openModal(category, index) {
+function openModal(category, index) {
   const artwork = artworks[category][index];
-
-  currentCategory = category;
-  currentIndex = index;
-
-  isZoomed = false;
+currentCategory = category;
+currentIndex = index;
+   isZoomed = false;
   moveX = 0;
   moveY = 0;
   updateZoomTransform();
+
+  attachImage(modalImg, artwork.image);
 
   document.getElementById('modalTitle').textContent = artwork.title;
   document.getElementById('modalSize').textContent = artwork.size || '';
@@ -660,26 +660,16 @@ async function openModal(category, index) {
   const onView = document.getElementById('modalOnView');
 
   if (artwork.onView) {
-    onView.innerHTML = `
+    onView.innerHTML = 
       <div class="modal-onview-label">CURRENTLY ON VIEW</div>
       <div class="modal-onview-text">
         ${artwork.onView.replace(/\n/g, "<br>")}
       </div>
-    `;
+    ;
   } else {
     onView.innerHTML = "";
   }
 
-  const img = new Image();
-  img.src = artwork.image;
-
-  try {
-    await img.decode();
-  } catch (e) {
-    // continue even if decode fails
-  }
-
-  modalImg.src = artwork.image;
   modal.classList.add('open');
 }
 function changeArtwork(direction) {
