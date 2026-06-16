@@ -660,12 +660,12 @@ currentIndex = index;
   const onView = document.getElementById('modalOnView');
 
   if (artwork.onView) {
-    onView.innerHTML = 
-      <div class="modal-onview-label">CURRENTLY ON VIEW</div>
-      <div class="modal-onview-text">
-        ${artwork.onView.replace(/\n/g, "<br>")}
-      </div>
-    ;
+    onView.innerHTML = `
+  <div class="modal-onview-label">CURRENTLY ON VIEW</div>
+  <div class="modal-onview-text">
+    ${artwork.onView.replace(/\n/g, "<br>")}
+  </div>
+`;
   } else {
     onView.innerHTML = "";
   }
