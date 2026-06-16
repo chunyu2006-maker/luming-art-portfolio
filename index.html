@@ -78,7 +78,6 @@
 }
     .card::after {
   content: "View Artwork";
-  white-space: pre;
   position: absolute;
   inset: 0;
   display: flex;
@@ -87,9 +86,10 @@
   text-align: center;
   color: white;
   font-size: 13px;
-  letter-spacing: 0.08em;
-  line-height: 1.8;
-  background: rgba(0, 0, 0, 0.28);
+      font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.18);
   opacity: 0;
   transition: opacity 0.25s ease;
   pointer-events: none;
