@@ -494,9 +494,12 @@
     const portfolioTitle = document.getElementById('portfolioTitle');
     const categoryNav = document.getElementById('categoryNav');
     const modal = document.getElementById('modal');
-    const modalImg = document.getElementById('modalImg');
-    
-    modalImg.draggable = false;
+const modalImg = document.getElementById('modalImg');
+
+let currentCategory = null;
+let currentIndex = null;
+
+modalImg.draggable = false;
 
     function labelForCategory(category) {
   const labels = {
