@@ -468,11 +468,17 @@
           
           <p id="modalStatus" class="status"></p>
 
-          <div id="modalOnView" class="modal-onview"></div>
-          
-          <div style="margin-top: 36px;">
-            <button class="btn primary" onclick="goToPage('contact'); closeModal();">Inquiry</button>
-          </div>
+        <div id="modalOnView" class="modal-onview"></div>
+
+<div class="modal-nav">
+  <button onclick="changeArtwork(-1)">← Previous</button>
+  <span id="modalCounter"></span>
+  <button onclick="changeArtwork(1)">Next →</button>
+</div>
+
+<div style="margin-top: 28px;">
+  <button class="btn primary" onclick="goToPage('contact'); closeModal();">Inquiry</button>
+</div>
         </div>
       </div>
     </div>
