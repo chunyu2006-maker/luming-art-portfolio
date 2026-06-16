@@ -649,8 +649,11 @@ currentIndex = index;
   moveX = 0;
   moveY = 0;
   updateZoomTransform();
-
+modalImg.style.opacity = "0";
   attachImage(modalImg, artwork.image);
+  modalImg.onload = () => {
+    modalImg.style.opacity = "1";
+};
 
   document.getElementById('modalTitle').textContent = artwork.title;
   document.getElementById('modalSize').textContent = artwork.size || '';
