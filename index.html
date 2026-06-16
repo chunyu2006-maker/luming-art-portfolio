@@ -618,7 +618,14 @@ function openModal(category, index) {
 
   modal.classList.add('open');
 }
+function changeArtwork(direction) {
+  if (!currentCategory) return;
 
+  const list = artworks[currentCategory];
+  currentIndex = (currentIndex + direction + list.length) % list.length;
+
+  openModal(currentCategory, currentIndex);
+}
    function closeModal() {
   modal.classList.remove('open');
 
