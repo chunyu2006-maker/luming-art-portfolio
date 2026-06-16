@@ -466,21 +466,21 @@
 <div class="modal-grid">
         <img id="modalImg" alt="Enlarged artwork" />
         <div class="modal-info">
-          <h2 id="modalTitle"></h2>
-          <p id="modalSize" class="meta"></p>
-          <p id="modalMedium" class="meta"></p>
-          
-          <p id="modalStatus" class="status"></p>
+         <div class="modal-nav">
+  <button onclick="changeArtwork(-1)" aria-label="Previous artwork">‹</button>
+  <button onclick="changeArtwork(1)" aria-label="Next artwork">›</button>
+</div>
 
-        <div id="modalOnView" class="modal-onview"></div>
+<h2 id="modalTitle"></h2>
+<p id="modalSize" class="meta"></p>
+<p id="modalMedium" class="meta"></p>
+
+<p id="modalStatus" class="status"></p>
+
+<div id="modalOnView" class="modal-onview"></div>
 
 <div style="margin-top: 28px;">
   <button class="btn primary" onclick="goToPage('contact'); closeModal();">Inquiry</button>
-</div>
-
-<div class="modal-nav">
-<button onclick="changeArtwork(-1)" aria-label="Previous artwork">‹</button>
-<button onclick="changeArtwork(1)" aria-label="Next artwork">›</button>
 </div>
         </div>
       </div>
