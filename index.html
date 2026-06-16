@@ -549,7 +549,7 @@
 moveX = 0;
 moveY = 0;
 updateZoomTransform();
- 
+
 modalImg.onload = function () {
 
   document.getElementById('modalTitle').textContent = artwork.title;
@@ -569,11 +569,13 @@ modalImg.onload = function () {
   } else {
     onView.innerHTML = "";
   }
-}
 
-modalImg.onload = function () {
-  fillModalInfo();
   modal.classList.add('open');
+};
+
+modalImg.onerror = modalImg.onload;
+
+attachImage(modalImg, artwork.image);
 };
 
 modalImg.onerror = function () {
