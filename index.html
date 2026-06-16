@@ -549,16 +549,15 @@
       renderCategoryNav(category);
       renderArtworks(category);
     }
+function openModal(category, index) {
+  const artwork = artworks[category][index];
 
-    function openModal(category, index) {
-      const artwork = artworks[category][index];
+  isZoomed = false;
+  moveX = 0;
+  moveY = 0;
+  updateZoomTransform();
 
-     isZoomed = false;
-moveX = 0;
-moveY = 0;
-updateZoomTransform();
-
-modalImg.onload = function () {
+  attachImage(modalImg, artwork.image);
 
   document.getElementById('modalTitle').textContent = artwork.title;
   document.getElementById('modalSize').textContent = artwork.size || '';
@@ -579,20 +578,7 @@ modalImg.onload = function () {
   }
 
   modal.classList.add('open');
-};
-
-modalImg.onerror = modalImg.onload;
-
-attachImage(modalImg, artwork.image);
-};
-
-modalImg.onerror = function () {
-  fillModalInfo();
-  modal.classList.add('open');
-};
-
-attachImage(modalImg, artwork.image);
-    }
+}
 
    function closeModal() {
   modal.classList.remove('open');
