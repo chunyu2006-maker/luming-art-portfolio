@@ -590,7 +590,8 @@ modalImg.draggable = false;
     }
 function openModal(category, index) {
   const artwork = artworks[category][index];
-
+currentCategory = category;
+currentIndex = index;
   isZoomed = false;
   moveX = 0;
   moveY = 0;
