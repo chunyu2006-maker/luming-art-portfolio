@@ -499,14 +499,13 @@
 
         <div id="modalOnView" class="modal-onview"></div>
 
-<div class="modal-nav">
-  <button onclick="changeArtwork(-1)">← Previous</button>
-  <span id="modalCounter"></span>
-  <button onclick="changeArtwork(1)">Next →</button>
-</div>
-
 <div style="margin-top: 28px;">
   <button class="btn primary" onclick="goToPage('contact'); closeModal();">Inquiry</button>
+</div>
+
+<div class="modal-nav">
+  <button onclick="changeArtwork(-1)" aria-label="Previous artwork">‹</button>
+  <button onclick="changeArtwork(1)" aria-label="Next artwork">›</button>
 </div>
         </div>
       </div>
