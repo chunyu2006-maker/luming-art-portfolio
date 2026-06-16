@@ -76,6 +76,28 @@
 .card:hover img {
   transform: scale(1.02);
 }
+    .card::after {
+  content: "────────\A View\A────────";
+  white-space: pre;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  line-height: 1.8;
+  background: rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.card:hover::after {
+  opacity: 1;
+}
     .card-body {
   padding: 10px 0 0 0;
 }
