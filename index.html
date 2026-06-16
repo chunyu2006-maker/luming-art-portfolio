@@ -423,10 +423,17 @@
 
   opacity: 1;
 }
+.modal-info {
+  position: relative;
+  padding-top: 72px;      /* reserve space for arrows */
+}
+
 .modal-nav {
-  position: static;
-  margin-top: 18px;
-  padding: 0 28px 20px;
+  position: absolute;
+
+  top: 18px;
+  left: 28px;
+  right: 28px;
 
   display: flex;
   justify-content: space-between;
@@ -434,9 +441,10 @@
 }
 
 .modal-nav button {
-  font-size: 32px;
-  color: #777;
-}   
+  font-size: 30px;
+  font-weight: 300;
+  color: #888;
+}
 }
   </style>
 </head>
