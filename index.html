@@ -303,9 +303,22 @@
       z-index: 5;
     }
 
-    .bio-layout { display: grid; grid-template-columns: 320px 1fr; gap: 32px; align-items: start; }
-    .bio-image { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 22px; display: block; }
+  .bio-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 48px;
+  align-items: start;
+}
 
+.bio-image {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  object-position: center 25%;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto;
+}
 .category-nav {
   display: flex;
   gap: 14px;
