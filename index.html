@@ -644,6 +644,7 @@ function preloadCategoryCovers() {
       portfolioTitle.textContent = labelForCategory(category);
       renderCategoryNav(category);
       renderArtworks(category);
+      preloadImagesForCategory(category);
     }
 function openModal(category, index) {
   const artwork = artworks[category][index];
